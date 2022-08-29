@@ -1,4 +1,5 @@
-import { Collaborator } from "./Collaborator";
+import { Collaborator } from "./collaborator";
+
 
 /**
  * Mission representation

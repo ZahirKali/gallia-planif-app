@@ -5,11 +5,9 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { catchError, Observable } from 'rxjs';
-import { Collaborator } from '../Collaborator';
-import { Mission } from '../mission';
-import { MissionService } from '../mission.service';
-import { NotificationService } from '../service/notification.service';
+import { Mission } from '../../model/mission';
+import { MissionService } from '../../service/mission.service';
+import { NotificationService } from '../../service/notification.service';
 
 
 @Component({
@@ -53,25 +51,13 @@ export class MissionComponent implements OnInit {
       lastName: ['', [Validators.required]],
       birthDay: ['', [Validators.required]],
     });
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    // this.dataSource.paginator = this.paginator;
+    // this.dataSource.sort = this.sort;
   }
 
   onFormSubmit() {
-    const collaborator = this.missionForm.value;
-    this.createCollaborator(collaborator);
   }
 
-
-  createCollaborator(collaborator: Collaborator) {
-    console.log('Create collaborator');
-    console.log(collaborator);
-    this.missionService.createCollaborator(collaborator)
-      .subscribe({
-        next: (v) => this.missionForm.reset(),
-        error: (e) => this.notificationService.showError(e.error.message)
-      })
-  }
 
   resetForm() {
     this.missionForm.reset();

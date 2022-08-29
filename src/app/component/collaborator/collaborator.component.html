@@ -1,0 +1,124 @@
+<div class="container">
+
+  <mat-card class="mat-elevation-z8">
+    <mat-toolbar color="accent"
+      style="box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);">
+      <div align="center" style="text-align: right;">
+        Collaborateurs 
+      </div>
+    </mat-toolbar>
+
+    <mat-card-content>
+
+      <form [formGroup]="form" (ngSubmit)="onFormSubmit()">
+        <table>
+          <tr>
+            <td>
+              <mat-form-field appearance="standard">
+                <mat-label>Numéro de carte profesionnelle</mat-label>
+                <input matInput placeholder="Numéro de carte profesionnelle" formControlName="proCardNumber">
+              </mat-form-field>
+            </td>
+
+            <td>
+              <mat-form-field appearance="standard">
+                <mat-label>Prénom</mat-label>
+                <input matInput placeholder="Prénom" formControlName="firstName">
+              </mat-form-field>
+            </td>
+
+            <td>
+              <mat-form-field appearance="standard">
+                <mat-label>Nom</mat-label>
+                <input matInput placeholder="Nom" formControlName="lastName">
+              </mat-form-field>
+            </td>
+
+            <td>
+              <mat-form-field appearance="standard">
+                <input matInput [matDatepicker]="picker" placeholder="Date de naissance" autocomplete="off"
+                  formControlName="birthDay">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </td>
+          </tr>
+
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="content-center">
+              <button type="reset" mat-raised-button color="accent" (click)="form.reset()">Réinitialiser</button>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <button type="submit" mat-raised-button color="accent" matTooltip="Submit"
+                [disabled]="!form.valid">Submit</button>
+            </td>
+          </tr>
+        </table>
+
+        <br><br>
+
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <button mat-icon-button aria-label="Example icon button with a delete icon" type="button" mat-raised-button color="accent" 
+        matTooltip="Supprimer" (click)="deleteData()"><mat-icon>Supprimer</mat-icon></button>
+
+        <div>
+
+          <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8"
+            style="box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);">
+
+            <ng-container matColumnDef="select">
+              
+              <mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? masterToggle() : null"
+                  [checked]="selection.hasValue() && isAllSelected()"
+                  [indeterminate]="selection.hasValue() && !isAllSelected()">
+                </mat-checkbox>
+              </mat-header-cell>
+              
+              <mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()" 
+                              (change)="$event ? selection.toggle(row) : null"
+                              [checked]="selection.isSelected(row)" 
+                              [aria-label]="checkboxLabel(row)">
+                </mat-checkbox>
+              </mat-cell>
+              
+            </ng-container>
+
+            <ng-container matColumnDef="proCardNumber">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Numéro carte profesionnelle </mat-header-cell>
+              <mat-cell *matCellDef="let collaborator"> {{collaborator.proCardNumber}} </mat-cell>
+            </ng-container>
+
+
+            <ng-container matColumnDef="firstName">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Prénom </mat-header-cell>
+              <mat-cell *matCellDef="let collaborator"> {{collaborator.firstName}} </mat-cell>
+            </ng-container>
+
+
+            <ng-container matColumnDef="lastName">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Nom </mat-header-cell>
+              <mat-cell *matCellDef="let collaborator"> {{collaborator.lastName}} </mat-cell>
+            </ng-container>
+
+
+            <ng-container matColumnDef="birthDay">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Date de naissance </mat-header-cell>
+              <mat-cell *matCellDef="let collaborator"> {{collaborator.birthDay}} </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+          </mat-table>
+
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        </div>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

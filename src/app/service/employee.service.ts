@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Employee, State,City } from './employee';
-import { Country } from './employee';
+import { City, Country, Employee, State } from '../model/employee';
+
+
 
 @Injectable({
   providedIn: 'root'

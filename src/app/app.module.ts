@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
-import { MissionComponent } from './mission/mission.component';
+import { MissionComponent } from './component/mission/mission.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { MatInputModule } from "@angular/material/input";
@@ -26,20 +26,23 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { NgMarqueeModule } from 'ng-marquee';
 import { MatDialogModule } from '@angular/material/dialog';
-import { EmployeeComponent } from './employee/employee.component';
+import { EmployeeComponent } from './component/employee/employee.component';
 import { ToastrModule } from 'ngx-toastr';
+import { CollaboratorComponent } from './component/collaborator/collaborator.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     MissionComponent,
-    EmployeeComponent
+    EmployeeComponent,
+    CollaboratorComponent
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule,
     BrowserAnimationsModule,
     MatButtonModule,
     MatMenuModule,
