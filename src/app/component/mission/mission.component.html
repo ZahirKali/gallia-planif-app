@@ -1,11 +1,11 @@
-
 <div class="container">
 
   <mat-card class="mat-elevation-z8">
-    <mat-toolbar color="accent" style="box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);">
+    <mat-toolbar color="accent"
+      style="box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);">
       <div align="center" style="text-align: right;">
-        Gallia - planification
-      </div> 
+        Gallia - mission
+      </div>
     </mat-toolbar>
 
     <mat-card-content>
@@ -13,46 +13,197 @@
       <form [formGroup]="missionForm" (ngSubmit)="onFormSubmit()">
         <table>
           <tr>
+
             <td>
-              <mat-form-field appearance="standard">
-                <mat-label>Numéro de carte profesionnelle</mat-label>
-                <input matInput placeholder="Numéro de carte profesionnelle" formControlName="proCardNumber">
+              <!-- <mat-form-field appearance="standard">
+                <input matInput [matDatepicker]="pickerStartDate" placeholder="Date de début" autocomplete="off"
+                  formControlName="startDate" type="datetime-local">
+                <mat-datepicker-toggle matSuffix [for]="pickerStartDate"></mat-datepicker-toggle>
+                <mat-datepicker #pickerStartDate></mat-datepicker>
+              </mat-form-field> -->
+
+              <mat-form-field>
+                <input matInput type="datetime-local" placeholder="Date et heure de début" formControlName="startDate">
+              </mat-form-field>
+
+            </td>
+
+            <td>
+              <mat-form-field>
+                <input matInput type="datetime-local" placeholder="Date et heure de fin" formControlName="endDate">
               </mat-form-field>
             </td>
 
             <td>
-              <mat-form-field appearance="standard">
-                <mat-label>Prénom</mat-label>
-                <input matInput placeholder="Prénom" formControlName="firstName">
-              </mat-form-field>
-            </td>
-          
-            <td>
-              <mat-form-field appearance="standard">
-                <mat-label>Nom</mat-label>
-                <input matInput placeholder="Nom" formControlName="lastName">
+              <mat-form-field>
+                <mat-label>Collaborateur</mat-label>
+                <mat-select (selectionChange)="selectCollaborator($event)" formControlName="collaborator"
+                  matTooltip="Selectionner un collaborateur" autocomplete="off">
+                  <mat-option *ngFor="let collaborator of allCollaborators" [value]="collaborator.id">
+                    {{collaborator.firstName}} {{collaborator.lastName}}
+                  </mat-option>
+                </mat-select>
               </mat-form-field>
             </td>
 
             <td>
-              <mat-form-field appearance="standard">
-                <input matInput [matDatepicker]="picker" placeholder="Date de naissance" autocomplete="off" formControlName="birthDay">
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
+              <mat-form-field>
+                <mat-label>Client</mat-label>
+                <mat-select (selectionChange)="selectClient($event)" formControlName="client"
+                  matTooltip="Selectionner un mission" autocomplete="off">
+                  <mat-option *ngFor="let client of allClients" [value]="client.id">
+                    {{client.name}}
+                  </mat-option>
+                </mat-select>
               </mat-form-field>
             </td>
           </tr>
+
 
           <tr>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>
+              <mat-form-field>
+                <mat-label>Site</mat-label>
+                <mat-select (selectionChange)="selectSite($event)" formControlName="site"
+                  matTooltip="Selectionner un site" autocomplete="off">
+                  <mat-option *ngFor="let site of allSites" [value]="site.id">
+                    {{site.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </td>
+
+            <td>
+              <mat-form-field>
+                <mat-label>Fournisseur</mat-label>
+                <mat-select (selectionChange)="selectProvider($event)" formControlName="provider"
+                  matTooltip="Selectionner un fournisseur" autocomplete="off">
+                  <mat-option *ngFor="let provider of allProviders" [value]="provider.id">
+                    {{provider.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </td>
+
+            <td>
+              <mat-form-field appearance="standard">
+                <mat-label>Commentaire</mat-label>
+                <input matInput placeholder="Commentaire" formControlName="comment">
+              </mat-form-field>
+            </td>
+
             <td class="content-center">
-              <button type="submit" mat-raised-button color="accent" matTooltip="Submit" [disabled]="!missionForm.valid">Submit</button>  &nbsp;&nbsp;&nbsp;&nbsp; 
-              <button type="reset" mat-raised-button color="accent" (click)="resetForm()">Réinitialiser</button>
+              <button type="reset" mat-raised-button color="accent" (click)="resetForm()">Réinitialiser</button> &nbsp;&nbsp;&nbsp;&nbsp;
+              
+              <button type="submit" mat-raised-button color="accent" matTooltip="Submit"
+                [disabled]="!missionForm.valid">Enregistrer</button> 
             </td>
           </tr>
+
         </table>
+
+        <br><br>
+
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <button mat-icon-button aria-label="Example icon button with a delete icon" type="button" mat-raised-button
+          color="accent" matTooltip="Supprimer" (click)="deleteData()">
+          <mat-icon>Supprimer</mat-icon>
+        </button>
+
+        <div>
+
+          <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8"
+            style="box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);">
+
+            <ng-container matColumnDef="select">
+
+              <mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? masterToggle() : null"
+                  [checked]="selection.hasValue() && isAllSelected()"
+                  [indeterminate]="selection.hasValue() && !isAllSelected()">
+                </mat-checkbox>
+              </mat-header-cell>
+
+              <mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                  [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+                </mat-checkbox>
+              </mat-cell>
+
+            </ng-container>
+
+            <ng-container matColumnDef="startDate">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Date de début </mat-header-cell>
+              <mat-cell *matCellDef="let mission"> {{mission.startDate}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="endDate">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Date de fin </mat-header-cell>
+              <mat-cell *matCellDef="let mission"> {{mission.endDate}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="collaborator">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Collaborateur </mat-header-cell>
+              <mat-cell *matCellDef="let mission"> {{mission.collaborator.firstName}} {{mission.collaborator.lastName}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="client">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Client </mat-header-cell>
+              <mat-cell *matCellDef="let mission"> {{mission.client.name}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="site">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Site </mat-header-cell>
+              <mat-cell *matCellDef="let mission"> {{mission.site.name}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="provider">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Fournisseur </mat-header-cell>
+              <mat-cell *matCellDef="let mission"> {{mission.provider.name}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="comment">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Commentaire </mat-header-cell>
+              <mat-cell *matCellDef="let mission"> {{mission.comment}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="totalWorkedHoursNumber">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Total heures </mat-header-cell>
+              <mat-cell *matCellDef="let mission"> {{mission.totalWorkedHoursNumber}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="morningWorkedHoursNumber">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Heures jour </mat-header-cell>
+              <mat-cell *matCellDef="let mission"> {{mission.morningWorkedHoursNumber}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="nightWorkedHoursNumber">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Heures nuit </mat-header-cell>
+              <mat-cell *matCellDef="let mission"> {{mission.nightWorkedHoursNumber}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="holidayWorkedHoursNumber">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Heures jour férié </mat-header-cell>
+              <mat-cell *matCellDef="let mission"> {{mission.holidayWorkedHoursNumber}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="nightHolidayWorkedHoursNumber">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Heures nuit et férié</mat-header-cell>
+              <mat-cell *matCellDef="let mission"> {{mission.nightHolidayWorkedHoursNumber}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="sundayWorkedHoursNumber">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Heures dimanche </mat-header-cell>
+              <mat-cell *matCellDef="let mission"> {{mission.sundayWorkedHoursNumber}} </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+          </mat-table>
+
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        </div>
 
       </form>
     </mat-card-content>

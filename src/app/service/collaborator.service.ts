@@ -9,10 +9,6 @@ import { HttpErrorHandlerService } from './http-error-handler.service';
 })
 export class CollaboratorService {
 
-  deleteCollaborators(collaborators: Collaborator[]) {
-    collaborators.forEach(collaborator => this.deleteCollaborator)
-  }
-
   deleteCollaborator(collaborator: Collaborator) : Observable<string> {
     return this.http.delete<string>(this.url + '/collaborator/id/' + collaborator.id + '/delete');
   }

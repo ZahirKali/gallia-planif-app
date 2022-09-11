@@ -1,0 +1,149 @@
+<div class="container">
+
+  <mat-card class="mat-elevation-z8">
+
+    <mat-toolbar color="accent"
+      style="box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);">
+      <div align="center" style="text-align: right;">
+        Sites
+      </div>
+    </mat-toolbar>
+
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onFormSubmit()">
+        <table>
+          <tr>
+            <td>
+              <mat-form-field appearance="standard">
+                <mat-label>Nom</mat-label>
+                <input matInput placeholder="Nom site" formControlName="name">
+              </mat-form-field>
+            </td>
+
+            <md-input-container formGroupName="address">
+              <td>
+                <mat-form-field appearance="standard">
+                  <mat-label>Adresse - numéro</mat-label>
+                  <input matInput placeholder="Adresse - numéro" formControlName="number">
+                </mat-form-field>
+              </td>
+
+              <td>
+                <mat-form-field appearance="standard">
+                  <mat-label>Adresse - type</mat-label>
+                  <input matInput placeholder="Rue, avenue, ..." formControlName="type">
+                </mat-form-field>
+              </td>
+
+
+              <td>
+                <mat-form-field appearance="standard">
+                  <mat-label>Adresse - libellé</mat-label>
+                  <input matInput placeholder="Adresse - libellé" formControlName="label">
+                </mat-form-field>
+              </td>
+
+              <td>
+                <mat-form-field appearance="standard">
+                  <mat-label>Adresse - code postal</mat-label>
+                  <input matInput placeholder="Code postal" formControlName="postCode">
+                </mat-form-field>
+              </td>
+
+              <td>
+                <mat-form-field appearance="standard">
+                  <mat-label>Adresse - ville</mat-label>
+                  <input matInput placeholder="Ville" formControlName="city">
+                </mat-form-field>
+              </td>
+            </md-input-container>
+          </tr>
+
+
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="content-center">
+              <button type="reset" mat-raised-button color="accent" (click)="form.reset()">Réinitialiser</button>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <button type="submit" mat-raised-button color="accent" matTooltip="Submit"
+                [disabled]="!form.valid">Enregistrer</button>
+            </td>
+          </tr>
+        </table>
+
+        <br><br>
+
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <button mat-icon-button aria-label="Example icon button with a delete icon" type="button" mat-raised-button
+          color="accent" matTooltip="Supprimer" (click)="deleteData()">
+          <mat-icon>Supprimer</mat-icon>
+        </button>
+
+        <div>
+
+          <mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8"
+            style="box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);">
+
+            <ng-container matColumnDef="select">
+
+              <mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? masterToggle() : null"
+                  [checked]="selection.hasValue() && isAllSelected()"
+                  [indeterminate]="selection.hasValue() && !isAllSelected()">
+                </mat-checkbox>
+              </mat-header-cell>
+
+              <mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                  [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+                </mat-checkbox>
+              </mat-cell>
+
+            </ng-container>
+
+            <ng-container matColumnDef="name">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Nom site </mat-header-cell>
+              <mat-cell *matCellDef="let site"> {{site.name}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="address.number">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Adresse - numéro </mat-header-cell>
+              <mat-cell *matCellDef="let site"> {{site.address.number}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="address.type">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Adresse - type </mat-header-cell>
+              <mat-cell *matCellDef="let site"> {{site.address.type}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="address.label">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Adresse - libellé </mat-header-cell>
+              <mat-cell *matCellDef="let site"> {{site.address.label}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="address.postCode">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Adresse - code postal </mat-header-cell>
+              <mat-cell *matCellDef="let site"> {{site.address.postCode}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="address.city">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Adresse - ville </mat-header-cell>
+              <mat-cell *matCellDef="let site"> {{site.address.city}} </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+          </mat-table>
+
+          <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+        </div>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

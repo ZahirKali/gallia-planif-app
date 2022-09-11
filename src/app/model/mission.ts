@@ -24,6 +24,12 @@ export class Mission {
 export class Client {
     id: number;
     name: string;
+    address: Address;
+}
+
+export class FlatClient {
+    id: number;
+    name: string;    
 }
 
 export class Site {

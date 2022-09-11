@@ -9,7 +9,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -29,6 +29,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { EmployeeComponent } from './component/employee/employee.component';
 import { ToastrModule } from 'ngx-toastr';
 import { CollaboratorComponent } from './component/collaborator/collaborator.component';
+import { ClientComponent } from './component/client/client.component';
+import { SiteComponent } from './component/site/site.component';
+import { ProviderComponent } from './component/provider/provider.component';
+
 
 
 @NgModule({
@@ -36,7 +40,10 @@ import { CollaboratorComponent } from './component/collaborator/collaborator.com
     AppComponent,
     MissionComponent,
     EmployeeComponent,
-    CollaboratorComponent
+    CollaboratorComponent,
+    ClientComponent,
+    SiteComponent,
+    ProviderComponent
   ],
   imports: [
     BrowserModule,
@@ -67,7 +74,12 @@ import { CollaboratorComponent } from './component/collaborator/collaborator.com
     MatDialogModule,
     ToastrModule.forRoot()
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+    {provide: MAT_DATE_LOCALE, useValue: 'fr-FR'}
+  ],
+  bootstrap: [AppComponent],
+  exports:[
+    MatSidenavModule
+  ]
 })
 export class AppModule { }

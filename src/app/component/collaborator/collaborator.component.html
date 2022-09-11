@@ -9,7 +9,6 @@
     </mat-toolbar>
 
     <mat-card-content>
-
       <form [formGroup]="form" (ngSubmit)="onFormSubmit()">
         <table>
           <tr>
@@ -52,7 +51,7 @@
               <button type="reset" mat-raised-button color="accent" (click)="form.reset()">Réinitialiser</button>
               &nbsp;&nbsp;&nbsp;&nbsp;
               <button type="submit" mat-raised-button color="accent" matTooltip="Submit"
-                [disabled]="!form.valid">Submit</button>
+                [disabled]="!form.valid">Enregistrer</button>
             </td>
           </tr>
         </table>
