@@ -32,6 +32,8 @@ import { CollaboratorComponent } from './component/collaborator/collaborator.com
 import { ClientComponent } from './component/client/client.component';
 import { SiteComponent } from './component/site/site.component';
 import { ProviderComponent } from './component/provider/provider.component';
+import { RouterModule } from '@angular/router';
+import { PageNotFoundComponent } from './component/page-not-found/page-not-found.component';
 
 
 
@@ -43,7 +45,8 @@ import { ProviderComponent } from './component/provider/provider.component';
     CollaboratorComponent,
     ClientComponent,
     SiteComponent,
-    ProviderComponent
+    ProviderComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
@@ -72,7 +75,16 @@ import { ProviderComponent } from './component/provider/provider.component';
     MatPaginatorModule,
     NgMarqueeModule,
     MatDialogModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    RouterModule.forRoot([
+      { path: 'collaborator', component: CollaboratorComponent },
+      { path: 'mission', component: MissionComponent },
+      { path: 'client', component: ClientComponent },
+      { path: 'site', component: SiteComponent },
+      { path: 'provider', component: ProviderComponent },
+      { path: '', redirectTo: '/mission', pathMatch: 'full'},
+      { path: '**', component: PageNotFoundComponent }
+    ])
   ],
   providers: [
     {provide: MAT_DATE_LOCALE, useValue: 'fr-FR'}
